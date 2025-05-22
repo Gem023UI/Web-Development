@@ -61,7 +61,8 @@ class CustomerController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $customer = Customer::find($id);
+        return response()->json($customer);
     }
 
     /**
@@ -69,7 +70,35 @@ class CustomerController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $customer = Customer::find($id);
+        $user = User::where('id', $customer->user_id)->first();
+        $user->name = $request->fname . ' ' . $request->lname;
+        $user->email = $request->email;
+        $user->password = bcrypt($request->password);
+        $user->save();
+        $customer->user_id = $user->id;
+
+        $customer->lname = $request->lname;
+        $customer->fname = $request->fname;
+        $customer->addressline = $request->addressline;
+
+        $customer->zipcode = $request->zipcode;
+        $customer->phone = $request->phone;
+        $customer->town = $request->town;
+        $files = $request->file('uploads');
+        $customer->image_path = 'storage/images/' . $files->getClientOriginalName();
+        $customer->save();
+
+        Storage::put(
+            'public/images/' . $files->getClientOriginalName(),
+            file_get_contents($files)
+        );
+
+        return response()->json([
+            "success" => "customer updated successfully.",
+            "customer" => $customer,
+            "status" => 200
+        ]);
     }
 
     /**
@@ -77,6 +106,9 @@ class CustomerController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $customer = Customer::find($id)->first();
+        Customer::destroy($id);
+        User::where('id', $customer->user_id)->delete();
+        return response()->json(['message' => 'customer deleted']);
     }
 }
