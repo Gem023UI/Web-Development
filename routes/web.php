@@ -17,3 +17,4 @@ Route::get('/', function () {
     return view('welcome');
 });
 Route::view('/customers', 'customer.index');
+Route::view('/items', 'item.index');

@@ -39,7 +39,7 @@
               <h4 class="modal-title">Create new customer</h4>
               <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body" id="cmodal">
               <form id="cform" method="#" action="#" enctype="multipart/form-data">
       
                   <div class="form-group">

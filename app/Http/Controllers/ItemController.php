@@ -15,6 +15,7 @@ class ItemController extends Controller
     public function index()
     {
         $items = Stock::with('item')->get();
+        // $items = Item::with('stock')->get();
         return response()->json($items);
     }
 
